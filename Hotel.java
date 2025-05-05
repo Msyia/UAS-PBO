@@ -3,79 +3,48 @@ import java.util.List;
 
 public class Hotel {
     private String name;
-    private List<Room> rooms;
-    private List<Reservation> reservations;
+    private List<Room> rooms = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Hotel(String name) {
         this.name = name;
-        this.rooms = new ArrayList<>();
-        this.reservations = new ArrayList<>();
     }
 
     public void addRoom(Room room) {
         rooms.add(room);
     }
 
-    public void showAvailableRooms() {
-        System.out.println("\n--- Daftar Kamar Tersedia ---");
-        boolean found = false;
-        for (Room room : rooms) {
-            if (room.isAvailable()) {
-                System.out.println("Nomor Kamar: " + room.getRoomNumber() +
-                                   ", Nama: " + room.getName() +
-                                   ", Tipe: " + room.getType());
-                found = true;
+    public List<Room> getAvailableRooms() {
+        List<Room> available = new ArrayList<>();
+        for (Room r : rooms) {
+            if (r.isAvailable()) {
+                available.add(r);
             }
         }
-        if (!found) {
-            System.out.println("Tidak ada kamar yang tersedia saat ini.");
-        }
+        return available;
     }
 
-    public boolean bookRoom(int roomNumber, Customer customer) {
-        for (Room room : rooms) {
-            if (room.getRoomNumber() == roomNumber && room.isAvailable()) {
-                room.setAvailable(false);
-                Reservation reservation = new Reservation(customer, room);
-                reservations.add(reservation);
-                System.out.println("Pemesanan berhasil untuk " + customer.getName() +
-                                   " di kamar " + room.getName() + ".");
-                return true;
-            }
+    public boolean bookRoom(Room room, Customer customer) {
+        if (room.isAvailable()) {
+            room.setAvailable(false);
+            reservations.add(new Reservation(customer, room));
+            return true;
         }
-        System.out.println("Kamar tidak tersedia atau tidak ditemukan!");
         return false;
     }
 
-    public boolean cancelBooking(int roomNumber, Customer customer) {
-        Reservation toRemove = null;
-        for (Reservation reservation : reservations) {
-            if (reservation.getRoom().getRoomNumber() == roomNumber &&
-                reservation.getCustomer().getEmail().equals(customer.getEmail())) {
-                toRemove = reservation;
-                break;
+    public boolean cancelReservation(Room room, String email) {
+        for (Reservation r : reservations) {
+            if (r.getRoom().equals(room) && r.getCustomer().getEmail().equals(email)) {
+                room.setAvailable(true);
+                reservations.remove(r);
+                return true;
             }
         }
-
-        if (toRemove != null) {
-            toRemove.getRoom().setAvailable(true);
-            reservations.remove(toRemove);
-            System.out.println("Pemesanan berhasil dibatalkan untuk " + customer.getName() + ".");
-            return true;
-        } else {
-            System.out.println("Reservasi tidak ditemukan!");
-            return false;
-        }
+        return false;
     }
 
-    public void showAllReservations() {
-        System.out.println("\n--- Daftar Semua Reservasi ---");
-        if (reservations.isEmpty()) {
-            System.out.println("Belum ada reservasi yang aktif.");
-        } else {
-            for (Reservation res : reservations) {
-                System.out.println(res);
-            }
-        }
+    public List<Reservation> getAllReservations() {
+        return reservations;
     }
 }

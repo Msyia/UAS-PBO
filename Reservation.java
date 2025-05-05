@@ -7,20 +7,11 @@ public class Reservation {
         this.room = room;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
+    public Customer getCustomer() { return customer; }
+    public Room getRoom() { return room; }
 
     @Override
     public String toString() {
-        return "Reservation{" +
-                "customer=" + customer.getName() +
-                ", room=" + room.getRoomNumber() +
-                ", type=" + room.getType() +
-                '}';
+        return room + " => " + customer;
     }
 }

@@ -15,18 +15,10 @@ public class Room {
     public String getName() { return name; }
     public String getType() { return type; }
     public boolean isAvailable() { return isAvailable; }
-
-    public void setAvailable(boolean available) {
-        this.isAvailable = available;
-    }
+    public void setAvailable(boolean available) { this.isAvailable = available; }
 
     @Override
     public String toString() {
-        return "Kamar{" +
-                "Nomor Kamar=" + roomNumber +
-                ", Nama='" + name + '\'' +
-                ", Tipe='" + type + '\'' +
-                ", Tersedia=" + isAvailable +
-                '}';
+        return roomNumber + " - " + name + " (" + type + ")";
     }
 }
